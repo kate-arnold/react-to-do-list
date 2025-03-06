@@ -2,8 +2,8 @@ function Item({ item }) {
   return (
     <li id={item?.id} className="todo_item">
       <button className="todo_items_left">
-        <svg>
-          <circle cx="11.998" cy="11.998" fillRule="nonzero" r="9.998" />
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="#e3dacb">
+          <circle cx="11" cy="11" fillRule="nonzero" r="8" />
         </svg>
         <p>{item?.title}</p>
       </button>
