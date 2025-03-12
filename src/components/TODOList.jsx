@@ -1,11 +1,21 @@
-function Item({ item }) {
+function Item({ item, setTodos }) {
+  const completeToDo = () => {
+    setTodos((prevTodos) =>
+      prevTodos.map((todo) =>
+        todo.id === item.id
+          ? { ...todo, is_completed: !todo.is_completed }
+          : todo
+      )
+    );
+  }
+
   return (
     <li id={item?.id} className="todo_item">
-      <button className="todo_items_left">
+      <button className="todo_items_left" onClick={completeToDo}>
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill={item.is_completed ? "currentColor" : "none"}>
           <circle cx="11" cy="11" r="8" />
         </svg>
-        <p>{item?.title}</p>
+        <p style={item.is_completed ? { textDecoration: "line-through" } : {}}>{item?.title}</p>
       </button>
       <div className="todo_items_right">
         <button>
@@ -25,11 +35,11 @@ function Item({ item }) {
   );
 }
 
-function TODOList({ todos }) {
+function TODOList({ todos, setTodos }) {
   return (
     <ol className="todo_list">
       {todos && todos.length > 0 ? (
-        todos?.map((item, index) => <Item key={index} item={item} />)
+        todos?.map((item, index) => <Item key={index} item={item} setTodos={setTodos} />)
       ) : (
         <p>Seems lonely in here, what are you up to?</p>
       )}
