@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import {useState} from "react";
 import {useRef} from "react";
+import { preinit } from "react-dom";
 
 function Item({ item, setTodos }) {
   const [editing, setEditing] = useState(false);
@@ -39,10 +40,24 @@ function Item({ item, setTodos }) {
     setEditing(false);
   };
 
+  const handleInputChange  = (event) => {
+    setTodos((prevTodos) => 
+      prevTodos.map((todo) =>
+        todo.id === item.id ? { ...todo, title: event.target.value } : todo
+      )
+    );
+  };
+
+  const handleDelete = () => {
+    setTodos((prevTodos) => 
+      prevTodos.filter((todo) => todo.id !== item.id)
+    )
+  };
+
   return (
     <li id={item?.id} className="todo_item">
       {editing ? (
-        <form className="edit-form" onSubmit={handleInpuSubmit}>
+        <form className="edit-form" onSubmit={handleInputSubmit}>
           <label htmlFor="edit-todo">
             <input
               ref={inputRef}
@@ -64,13 +79,13 @@ function Item({ item, setTodos }) {
             <p style={item.is_completed ? { textDecoration: "line-through" } : {}}>{item?.title}</p>
           </button>
           <div className="todo_items_right">
-            <button>
+            <button onClick={handleEdit}>
               <span className="visually-hidden">Edit</span>
               <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" strokeWidth="2" fill="none"> 
                 <path d="M20,8 L8,20 L4,20 L4,16 L16,4z M3,23 L20,23" />
               </svg>
             </button>
-            <button>
+            <button onClick={handleDelete}>
               <span className="visually-hidden">Delete</span>
               <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="red" strokeWidth="2" fill="none"> 
                 <path d="M4,4 L20,20 M4,20 L20,4" />
