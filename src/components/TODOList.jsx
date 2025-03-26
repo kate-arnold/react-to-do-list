@@ -1,20 +1,21 @@
-import { useEffect } from "react";
+import {useEffect} from "react";
 import {useState} from "react";
 import {useRef} from "react";
-import { preinit } from "react-dom";
+import {preinit} from "react-dom";
 
-function Item({ item, setTodos }) {
+function Item({item, todos, setTodos}) {
   const [editing, setEditing] = useState(false);
   const inputRef = useRef(null);
 
   const completeToDo = () => {
     setTodos((prevTodos) =>
       prevTodos.map((todo) =>
-        todo.id === item.id
-          ? { ...todo, is_completed: !todo.is_completed }
-          : todo
+        todo.id === item.id ? { ...todo, is_completed: !todo.is_completed } : todo
       )
     );
+
+    const updatedTodos = JSON.stringify(todos);
+    localStorage.setItem("todos", updatedTodos);
   }
 
   const handleEdit = () => {
@@ -33,10 +34,14 @@ function Item({ item, setTodos }) {
 
   const handleInputSubmit = (event) => {
     event.preventDefault();
+    const updatedTodos = JSON.stringify(todos);
+    localStorage.setItem("todos", updatedTodos);
     setEditing(false);
   };
 
   const handleInputBlur = () => {
+    const updatedTodos = JSON.stringify(todos);
+    localStorage.setItem("todos", updatedTodos);
     setEditing(false);
   };
 
@@ -46,12 +51,16 @@ function Item({ item, setTodos }) {
         todo.id === item.id ? { ...todo, title: event.target.value } : todo
       )
     );
+    const updatedTodos = JSON.stringify(todos);
+    localStorage.setItem("todos", updatedTodos);
   };
 
   const handleDelete = () => {
     setTodos((prevTodos) => 
       prevTodos.filter((todo) => todo.id !== item.id)
-    )
+    );
+    const updatedTodos = JSON.stringify(todos);
+    localStorage.setItem("todos", updatedTodos);
   };
 
   return (
@@ -102,7 +111,7 @@ function TODOList({ todos, setTodos }) {
   return (
     <ol className="todo_list">
       {todos && todos.length > 0 ? (
-        todos?.map((item, index) => <Item key={index} item={item} setTodos={setTodos} />)
+        todos?.map((item, index) => <Item key={index} item={item} todos={todos} setTodos={setTodos} />)
       ) : (
         <p>Seems lonely in here, what are you up to?</p>
       )}

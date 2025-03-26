@@ -1,8 +1,11 @@
-function Form({setTodos}) {
+function Form({todos, setTodos}) {
   const handleSubmit = (event) => {
     event.preventDefault();
     const value = event.target.todo.value;
-    setTodos((prevTodos) => [...prevTodos, {title: value, id: self.crypto.randomUUID(), is_completed: false }]);
+    const newTodo = {title: value, id: self.crypto.randomUUID(), is_completed: false};
+    setTodos((prevTodos) => [...prevTodos, newTodo]);
+    const updatedTodos = JSON.stringify(todos);
+    localStorage.setItem("todos", updatedTodos);
     event.target.reset();
   };
 
